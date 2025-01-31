@@ -1,6 +1,6 @@
-from api.base_api import BaseAPI
+from api.base_api import BaseApi
 
-class OrdersApi(BaseAPI):
+class OrdersApi(BaseApi):
     
     def create_order(self, order_data):
         return self.post('/api/v1/orders/create', order_data)
