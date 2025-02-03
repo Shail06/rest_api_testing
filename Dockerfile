@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y wget \
     && ln -s /opt/allure-2.32.1/bin/allure /usr/local/bin/allure
 
 # Expose a port for viewing reports (optional)
-EXPOSE 8080
+EXPOSE 9090
 
 # Use shell form for CMD to chain commands with &&
-CMD ["sh", "-c", "python3 runner.py && /usr/local/bin/allure serve test-report/allure-results -p 8080"]
+CMD ["sh", "-c", "python3 runner.py && /usr/local/bin/allure serve test-report/allure-results -p 9090"]
