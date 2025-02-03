@@ -31,14 +31,6 @@ def step_when_send_request(context):
         request_payload = json.dumps(order_request, indent=2)
     allure.attach(request_payload, name="Request Payload", attachment_type=allure.attachment_type.JSON)
 
-# def get_value(field_value, expected_type):
-#     if field_value in [None, ""]:
-#         return None
-#     elif isinstance(field_value, expected_type):
-#         return expected_type(field_value)
-#     else:
-#         return field_value
-    
 def get_value(value, expected_type):
     if value in [None, ""]:
         return None
@@ -79,13 +71,45 @@ def step_then_validate_response(context):
     
     soft_assert = context.soft_assert
     
-    soft_assert.soft_assert(response_order_details["product_id"] == request_order_details["product_id"], f'product_id mismatch! \nExpected: {request_order_details["product_id"]}, Actual: {response_order_details["product_id"]}')
+    soft_assert.soft_assert(response_order_details["product_id"] == request_order_details["product_id"], f'product_id mismatch! \n>> Expected: {request_order_details["product_id"]}, Actual: {response_order_details["product_id"]}')
     soft_assert.soft_assert(response_order_details["quantity"] == request_order_details["quantity"], f'quantity mismatch! \nExpected: {request_order_details["quantity"]}, Actual: {response_order_details["quantity"]}')
-    soft_assert.soft_assert(response_order_details["delivery_date"] == request_order_details["delivery_date"], f'delivery_date mismatch! \nExpected: {request_order_details["delivery_date"]}, Actual: {response_order_details["delivery_date"]}')
-    soft_assert.soft_assert(response_order_details["price_per_unit"] == request_order_details["price_per_unit"], f'price_per_unit mismatch! \nExpected: {request_order_details["price_per_unit"]}, Actual: {response_order_details["price_per_unit"]}')
-    soft_assert.soft_assert(response_order_details["discount_applied"] == request_order_details["discount_rate"], f'discount_rate mismatch! \nExpected: {request_order_details["discount_rate"]}, Actual: {response_order_details["discount_applied"]}')
+    soft_assert.soft_assert(response_order_details["delivery_date"] == request_order_details["delivery_date"], f'delivery_date mismatch! \n>> Expected: {request_order_details["delivery_date"]}, Actual: {response_order_details["delivery_date"]}')
+    soft_assert.soft_assert(response_order_details["price_per_unit"] == request_order_details["price_per_unit"], f'price_per_unit mismatch! \n>> Expected: {request_order_details["price_per_unit"]}, Actual: {response_order_details["price_per_unit"]}')
+    soft_assert.soft_assert(response_order_details["discount_applied"] == request_order_details["discount_rate"], f'discount_rate mismatch! \n>> Expected: {request_order_details["discount_rate"]}, Actual: {response_order_details["discount_applied"]}')
     soft_assert.assert_valid_uuid(response_order_details["order_id"], "Invalid order_id format")
     soft_assert.soft_assert(isinstance(response_order_details["confirmation_code"], str), "Invalid confirmation_code type")
     soft_assert.soft_assert(isinstance(response_order_details["total_amount"], float), "Invalid total_amount type")
+    if isinstance(response_order_details["total_amount"], float):
+        total_amount = request_order_details["quantity"] * request_order_details["price_per_unit"] * ( 1 - request_order_details["discount_rate"])
+        soft_assert.soft_assert(response_order_details["total_amount"] == total_amount, f'total_amount calculated wrong! \n>> Expected: {total_amount}, Actual: {response_order_details["total_amount"]}')
     soft_assert.assert_all()
+
+@when('I send {num_reqs} requests to creating an order')
+def step_when(context, num_reqs):
+    context.requests = []
+    context.responses = []
+    for i in range(int(num_reqs)):
+        order_request = OrderBuilder()\
+            .with_product_id(10001)\
+            .with_quantity(20)\
+            .with_delivery_date("2025-03-01")\
+            .with_price_per_unit(99.99)\
+            .with_discount_rate(0.5)\
+            .with_note(f"Duplicate Order: {i}")\
+            .build()
+        context.requests.append(order_request)
+        context.responses.append(OrdersApi(context.auth_token).create_order(order_request))
+        request_payload = json.dumps(order_request, indent=2)
+        allure.attach(request_payload, name="Request Payload", attachment_type=allure.attachment_type.JSON)
+        
+        
+@then('the responses should have different {string}')
+def step_then(context, string):
+    num_responses = len(context.responses)
+    for i in range(num_responses):
+        allure.attach(context.responses[i].text, name="Response Payload", attachment_type=allure.attachment_type.JSON)
+    order_ids = set(context.responses[i].json()['order_details']['order_id'] for i in range(num_responses))
+
+    soft_assert = context.soft_assert
+    soft_assert.soft_assert(len(order_ids) == num_responses, "Same order_ids detected!")
     
