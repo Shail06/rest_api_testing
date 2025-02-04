@@ -6,7 +6,7 @@ This document outlines the test approach and strategy for the Order Creation API
 
 Following are the test scenarios:
 
-##### Happy Paths / Positive Tests
+#### Happy Paths / Positive Tests
 
 | S No. | Test Description                                                      | Expected Outcome                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | ----- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -15,7 +15,7 @@ Following are the test scenarios:
 | 3     | Check if API response has valid fields & values                       | `201 Created` with correct order details<br />`product_id` from response matches request<br />`quantity` from response matches request<br />`delivery_date` from response matches request<br />`price_per_unit` from response matches request<br />`discount_applied` from response matches request<br />`order_id` should be a UUID<br />`confirmation_code` should present and be a string<br />`total_amount` should be float and should be calculated as: `quantity x price_per_unit x(1-discount_rate)` |
 | 4     | Check if multiple same requests create different order each time      | `201 Created` multiple times, `order_id` should be different                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
-##### Negative Tests
+#### Negative Tests
 
 | S. No | Test Description                                                 | Expected Outcome                                   |
 | ----- | ---------------------------------------------------------------- | -------------------------------------------------- |
@@ -38,7 +38,7 @@ Following are the test scenarios:
 | 21    | Order creation with `discount_rate = -1.5` (Less than 0)       | `400 Bad Request`, must be between `0-1`       |
 | 22    | Order creation with `discount_rate = ZERO` (a string)          | `400 Bad Request`, must be a decimal             |
 
-### Non Functional Tests
+#### Non Functional Tests
 
 | S. No | Test Description                                           | Expected Outcome                            |
 | ----- | ---------------------------------------------------------- | ------------------------------------------- |
