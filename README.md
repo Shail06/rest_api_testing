@@ -59,7 +59,7 @@ All the above dependencies/packages installation on local machine (like allure, 
 
 Allure Report Screenshots:
 
-| ![img](https://file+.vscode-resource.vscode-cdn.net/Users/shaileshwadhwa/Documents/SHAILESH/projects/neptune_assessment/docs/allure-1.png) | ![img](docs/allure-2.png) |
+| ![img](docs/allure-1.png) | ![img](docs/allure-2.png) |
 | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 
 ### Test approach and strategy
