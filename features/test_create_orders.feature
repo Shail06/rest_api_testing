@@ -5,7 +5,7 @@ Feature: Orders Creation API Testing
     When I send a request to create an order with the following data
       | product_id   | quantity   | delivery_date   | price_per_unit   | discount_rate   | note   |
       | <product_id> | <quantity> | <delivery_date> | <price_per_unit> | <discount_rate> | <note> |
-    Then the response status should be "201"
+    Then the response status should be 201
 
     Examples:
       | product_id | quantity | delivery_date | price_per_unit | discount_rate | note              |
@@ -17,20 +17,20 @@ Feature: Orders Creation API Testing
     When I send a request to create an order with the following data
       | product_id | quantity | delivery_date | price_per_unit | discount_rate | note              |
       |        102 |       10 |    2025-02-10 |          25.50 |           0.1 | Priority Delivery |
-    Then the response status should be "201"
+    Then the response status should be 201
     And the response should have valid fields and values
 
   Scenario: (Happy Path) Check if multiple same requests create different order each time
     Given I have a "valid" user auth token
     When I send 2 requests to creating an order
-    Then the responses should have different "order_id"
+    Then the responses should have different order_id
 
   Scenario Outline: (Negative Tests) Order creation with missing required fields
     Given I have a "valid" user auth token
     When I send a request to create an order with the following data
       | product_id   | quantity   | delivery_date   | price_per_unit   | discount_rate   | note   |
       | <product_id> | <quantity> | <delivery_date> | <price_per_unit> | <discount_rate> | <note> |
-    Then the response status should be "<status_code>"
+    Then the response status should be <status_code>
     And the response should have the "<error_message>"
 
     Examples:
@@ -45,7 +45,7 @@ Feature: Orders Creation API Testing
     When I send a request to create an order with the following data
       | product_id   | quantity   | delivery_date   | price_per_unit   | discount_rate   | note   |
       | <product_id> | <quantity> | <delivery_date> | <price_per_unit> | <discount_rate> | <note> |
-    Then the response status should be "<status_code>"
+    Then the response status should be <status_code>
     And the response should have the "<error_message>"
 
     Examples:
@@ -70,9 +70,18 @@ Feature: Orders Creation API Testing
     When I send a request to create an order with the following data
       | product_id | quantity | delivery_date | price_per_unit | discount_rate | note              |
       |        101 |       10 |    2025-02-10 |           25.3 |           0.1 | Priority Delivery |
-    Then the response status should be "<status_code>"
+    Then the response status should be <status_code>
 
     Examples:
       | token_type | status_code |
       | invalid    |         401 |
       | missing    |         401 |
+
+  Scenario: (Performance Tests) Check if API responds within an acceptable time
+  Given I have a "valid" user auth token
+  When I send a request to create an order with the following data
+      | product_id | quantity | delivery_date | price_per_unit | discount_rate | note              |
+      |        101 |       10 |    2025-02-10 |           25.3 |           0.1 | Priority Delivery |
+  Then the response status should be 201
+  And the response time should be less than 500 milliseconds
+  

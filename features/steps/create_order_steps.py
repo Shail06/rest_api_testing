@@ -46,7 +46,7 @@ def get_value(value, expected_type):
         return value
     return value
 
-@then('the response status should be "{status_code}"')
+@then('the response status should be {status_code}')
 def step_then_verify_status(context, status_code):
     soft_assert = context.soft_assert
     allure.attach(context.response.text, name="Response Payload", attachment_type=allure.attachment_type.JSON)
@@ -85,7 +85,7 @@ def step_then_validate_response(context):
     soft_assert.assert_all()
 
 @when('I send {num_reqs} requests to creating an order')
-def step_when(context, num_reqs):
+def step_when_send_mutiple_requests(context, num_reqs):
     context.requests = []
     context.responses = []
     for i in range(int(num_reqs)):
@@ -103,13 +103,17 @@ def step_when(context, num_reqs):
         allure.attach(request_payload, name="Request Payload", attachment_type=allure.attachment_type.JSON)
         
         
-@then('the responses should have different {string}')
-def step_then(context, string):
+@then('the responses should have different {field_name}')
+def step_then_verify_response_fieldname_values(context, field_name):
     num_responses = len(context.responses)
     for i in range(num_responses):
         allure.attach(context.responses[i].text, name="Response Payload", attachment_type=allure.attachment_type.JSON)
-    order_ids = set(context.responses[i].json()['order_details']['order_id'] for i in range(num_responses))
+    order_ids = set(context.responses[i].json()['order_details'][field_name] for i in range(num_responses))
 
     soft_assert = context.soft_assert
-    soft_assert.soft_assert(len(order_ids) == num_responses, "Same order_ids detected!")
-    
+    soft_assert.soft_assert(len(order_ids) == num_responses, f"Same {field_name} detected!")
+
+@then('the response time should be less than {max_response_time} milliseconds')
+def step_then_response_time_check(context, max_response_time):
+    response_time = context.response.elapsed.total_seconds() * 1000
+    assert response_time < int(max_response_time), f"API response time exceeded! Took {context.response_time} ms"    
