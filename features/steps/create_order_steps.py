@@ -116,4 +116,4 @@ def step_then_verify_response_fieldname_values(context, field_name):
 @then('the response time should be less than {max_response_time} milliseconds')
 def step_then_response_time_check(context, max_response_time):
     response_time = context.response.elapsed.total_seconds() * 1000
-    assert response_time < int(max_response_time), f"API response time exceeded! Took {context.response_time} ms"    
+    assert response_time < int(max_response_time), f"API response time exceeded! Took {response_time} ms"    
