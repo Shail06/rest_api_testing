@@ -40,7 +40,7 @@ There are two ways to run the tests:
 * [ ] Install python packages: `pip3 install -r requirements.txt`
 * [ ] Run the Tests: `python3 runner.py`  *This generates Results (HTML & ALLURE) under `test-report` directory.*
 * [ ] Generate Reports: `allure serve test-report/allure-results`
-  * This automatically opens allure web portal showing all the Test Results. If not, see the Link in Logs (something like *Server started at http://127.0.0.1:`<PORT>`/*)
+  * This automatically opens allure web portal showing all the Test Results. If not, see the Link in Logs (something like *Server started at http://127.0.0.1:PORT/*)
 
 **NOTE**: The test results are also available in plain HTML format in `report.html` but allure reports are more comprehensive.
 
