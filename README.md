@@ -8,7 +8,7 @@
 ### Project Structure
 
 ```
-neptune_assessment
+rest_api_testing
 ├── api
 │   ├── base_api.py			# Basic http methods e.g. POST 
 │   └── orders_api.py			# Orders api interactions
@@ -35,8 +35,8 @@ There are two ways to run the tests:
 
 **Requirements**: python3, pip3, [allure](https://allurereport.org/docs/install/) ( allure requires Java version 8+)
 
-* [ ] Clone this repository: `git clone https://github.com/Shail06/neptune_assessment.git`
-* [ ] Change Directory: `cd neptune_assessment`
+* [ ] Clone this repository: `git clone https://github.com/Shail06/rest_api_testing.git`
+* [ ] Change Directory: `cd rest_api_testing`
 * [ ] Install python packages: `pip3 install -r requirements.txt`
 * [ ] Run the Tests: `python3 runner.py`  *This generates Results (HTML & ALLURE) under `test-report` directory.*
 * [ ] Generate Reports: `allure serve test-report/allure-results`
@@ -50,10 +50,10 @@ All the above dependencies/packages installation on local machine (like allure, 
 
 **Requirements:** docker
 
-* [ ] Clone this repository: `git clone https://github.com/Shail06/neptune_assessment.git`
-* [ ] Change Directory: `cd neptune_assessment`
-* [ ] Build Docker Image: `docker build -t neptune_assessment .`
-* [ ] Run Tests: `docker run -it -p 9090:9090 --rm neptune_assessment`
+* [ ] Clone this repository: `git clone https://github.com/Shail06/rest_api_testing.git`
+* [ ] Change Directory: `cd rest_api_testing`
+* [ ] Build Docker Image: `docker build -t rest_api_testing .`
+* [ ] Run Tests: `docker run -it -p 9090:9090 --rm rest_api_testing`
   * This will run the tests and show allure logs where you can find the link to view the report ([http://127.0.0.1:9090](http://127.0.0.1:9090))
 
 Allure Report Screenshots:
